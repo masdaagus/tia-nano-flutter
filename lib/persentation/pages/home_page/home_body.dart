@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import '../../../application/post/post_loader_bloc.dart';
+import '../../../constant.dart';
 import '../../../injection.dart';
 import '../../core/styles/custom_text_theme.dart';
 import 'widgets/post_card.dart';
@@ -29,6 +31,9 @@ class HomeBody extends StatelessWidget {
                   onPressed: () {
                     context.read<PostLoaderBloc>().add(const PostLoaderEvent.reset());
                     context.read<PostLoaderBloc>().add(const PostLoaderEvent.loadPosts());
+                    final box = Hive.box(clickPostTimes);
+                    box.put('exp_date', DateTime.now().add(const Duration(days: 30)).millisecondsSinceEpoch);
+                    box.put('click_times', 0);
                   },
                   child: Text('Reload', style: getIt<LabelMedium>().medium),
                 ),
